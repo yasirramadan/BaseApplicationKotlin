@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 
@@ -8,61 +8,61 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
+
+
+
     defaultConfig {
-        applicationId "com.example.baseapplicationkotlin"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
     implementation project(':domain')
-    implementation project(':data')
 
-    // Support Libraries
-    implementation supportDependencies.appCompat
-    implementation supportDependencies.supportV4
-    implementation supportDependencies.pereference
-    implementation supportDependencies.constraintLayout
-    implementation supportDependencies.androidKTX
 
     // Kotlin
     implementation kotlinDependencies.kotlinStbLib
     implementation kotlinDependencies.coroutinesCore
     implementation kotlinDependencies.coroutinesAndroid
 
-    // Anko
-    implementation ankoDependencies.sdk
-    implementation ankoDependencies.commons
-    implementation ankoDependencies.appCompat
-
     // Android Architecture Components
+    implementation architectureComponents.persistenceRuntime
+    implementation architectureComponents.lifecycleExtension
     implementation architectureComponents.lifecycleRuntime
     implementation architectureComponents.lifecycleExtension
-    implementation architectureComponents.archNavFragment
-    implementation architectureComponents.archNavUI
 
     kapt architectureComponents.lifecycleCompiler
     kapt architectureComponents.persistenceCompiler
 
-    // Third Party - others
+
+    // Third party
     implementation thirdPartyDependencies.koinAndroid
-    implementation thirdPartyDependencies.koinViewModel
-    implementation thirdPartyDependencies.koinScope
+    implementation thirdPartyDependencies.retrofit
+    implementation thirdPartyDependencies.retroCoroutinesAdapter
+    implementation thirdPartyDependencies.gson
+    implementation thirdPartyDependencies.gsonConverter
     implementation thirdPartyDependencies.timber
+    implementation thirdPartyDependencies.loggingInterceptor
 
-
-    testImplementation 'junit:junit:4.12'
+    // Tests
+    testImplementation testDependencies.junit
+    androidTestImplementation testDependencies.testRunner
+    androidTestImplementation(testDependencies.espressoCore) {
+        exclude module: 'support-annotations'
+    }
 }
